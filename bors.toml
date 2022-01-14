@@ -8,7 +8,6 @@ pr_status = [
 
 cut_body_after = "---"
 delete-merged-branches = true
-use_squash_merge = true
 
 [committer]
 name = "David Marambio"
