@@ -1,0 +1,19 @@
+name: Main Workflow - Build image
+on:
+  push:
+    branches:
+      - staging
+jobs:
+  build:
+    name: Build container image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: build and push to docker
+      uses: mr-smithers-excellent/docker-build-push@v5
+      with: 
+        image:  tarea_devops
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        registry: ghcr.io
+        tags: ${{ github.sha }}, latest

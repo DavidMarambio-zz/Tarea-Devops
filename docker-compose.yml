@@ -1,0 +1,18 @@
+version: '3'
+services:
+  app:
+    build: ./
+    image: tarea:django
+    container_name: django
+    command:  >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    volumes: 
+      - .:/code/
+    env_file:
+      - .env
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+    ports:
+      - "3005:8000"
+  
+

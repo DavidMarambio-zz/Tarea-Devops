@@ -1,0 +1,32 @@
+name: Requirements for merging PR
+on:
+  pull_request:
+    # Only take PRs to devel
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - converted_to_draft
+      - ready_for_review
+
+# Run every script actions in bash
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  handle_pr:
+    # Don't run when its a draft PR
+    if: '!github.event.pull_request.draft'
+
+    name: PR has only one commit
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - if: github.event.pull_request.commits < 1
+        run: |
+          echo "::error::PR has less than one commit"
+          exit 1

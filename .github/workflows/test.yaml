@@ -1,0 +1,41 @@
+name: Test
+on:
+  push:
+    branches:
+      - staging    # Causes CI to run when Bors pushes to staging
+      - trying     # Causes CI to run when Bors pushes to trying (bors try)
+jobs:
+  test:
+    name: Run test suite
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Create ENV file
+      run: echo 'SECRET_KEY="${{ secrets.SECRET_KEY }}"' >> .env
+    - name: Build docker images
+      run: docker-compose up -d --build
+    - name: Run tests
+      run: docker exec django pytest
+  passed:
+    name: All check passed
+    needs: [test]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Raise failure
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: |
+          echo "::error::There are failing required jobs"
+          exit 1
+  # ci-success:
+  #   name: Done
+  #   if: ${{ success() }}
+  #   needs:
+  #     - test
+  #     - build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Done
+  #       run: echo Done
+

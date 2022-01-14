@@ -1,0 +1,14 @@
+status = [
+    "All check passed"
+]
+
+pr_status = [
+    "PR has only one commit"
+]
+
+cut_body_after = "---"
+delete-merged-branches = true
+
+[committer]
+name = "David Marambio"
+email = "david.marambios@gmail.com"
